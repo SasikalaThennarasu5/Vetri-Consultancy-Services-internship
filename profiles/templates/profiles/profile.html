@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+  <div class="card mb-4">
+    <div class="card-body d-flex justify-content-between">
+      <h3>👤 {{ profile.full_name|default:user.username }}</h3>
+
+      <div>
+        Profile Completion: {{ completion_percent }}%
+        <div class="progress" style="height:8px;">
+          <div class="progress-bar bg-success"
+               style="width: {{ completion_percent }}%">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h4>📌 Profile Summary</h4>
+  <div class="card mb-3">
+    <div class="card-body">
+      {{ profile.summary|default:"No summary added yet" }}
+    </div>
+  </div>
+
+  <h4>🛠 Skills</h4>
+
+{% if skills_list %}
+  {% for skill in skills_list %}
+    <span class="badge bg-secondary me-1">
+      {{ skill }}
+    </span>
+  {% endfor %}
+{% else %}
+  <span class="text-muted">No skills added</span>
+{% endif %}
+  </div>
+<hr>
+
+  <div>
+
+  <h4>💼 Experience</h4>
+  <p>{{ profile.experience|default:0 }} years</p>
+</div>
+  <hr>
+
+  <h4>🎓 Certificates</h4>
+
+  {% for cert in certificates %}
+    <div class="card mb-2">
+      <div class="card-body d-flex justify-content-between">
+        <div>
+          ✅ {{ cert.course.title }}
+          <br>
+          <small class="text-muted">
+            Completed on {{ cert.completed_on|date:"d M Y" }}
+          </small>
+        </div>
+
+        <a href="{% url 'training:certificate' cert.id %}"
+           class="btn btn-success btn-sm">
+          Download
+        </a>
+      </div>
+    </div>
+  {% empty %}
+    <p class="text-muted">No certificates earned yet</p>
+  {% endfor %}
+
+</div>
+{% endblock %}
