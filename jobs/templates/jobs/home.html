@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<div class="row">
+
+  <!-- LEFT SIDE: JOB SEARCH + LIST -->
+  <div class="col-md-8">
+
+    <!-- SEARCH BAR -->
+    <form method="get" class="mb-4">
+      <div class="row g-2">
+        <div class="col-md-5">
+          <input type="text" name="q" value="{{ query }}"
+                 class="form-control"
+                 placeholder="Search job title / skills">
+        </div>
+
+        <div class="col-md-4">
+          <input type="text" name="location" value="{{ location }}"
+                 class="form-control"
+                 placeholder="Location">
+        </div>
+
+        <div class="col-md-3">
+          <button class="btn btn-primary w-100">Search</button>
+        </div>
+      </div>
+    </form>
+
+    {% if user.is_authenticated and profile %}
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5>{{ user.username }}</h5>
+
+          <p class="mb-1">Profile Completion</p>
+          <div class="progress mb-2">
+            <div class="progress-bar bg-success"
+                 style="width: {{ completion }}%">
+              {{ completion }}%
+            </div>
+          </div>
+
+          <p><strong>Skills:</strong> {{ profile.skills|default:"Not added" }}</p>
+
+          <a href="{% url 'profiles:setup' %}"
+             class="btn btn-sm btn-outline-primary">
+            Edit Profile
+          </a>
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- JOB LIST -->
+    {% for job in jobs %}
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5>{{ job.title }}</h5>
+          <p class="text-muted">{{ job.company }} | {{ job.location }}</p>
+          <p>{{ job.description|truncatewords:20 }}</p>
+        </div>
+      </div>
+    {% empty %}
+      <div class="alert alert-warning">No jobs found</div>
+    {% endfor %}
+
+  </div>
+
+  <!-- RIGHT SIDE -->
+  <div class="col-md-4">
+    {% if user.is_authenticated and profile %}
+      <div class="card">
+        <div class="card-body">
+          <h5>{{ user.username }}</h5>
+          <p><strong>Skills:</strong><br>{{ profile.skills|default:"Not added" }}</p>
+        </div>
+      </div>
+    {% else %}
+      <div class="card">
+        <div class="card-body text-center">
+          <p>Please login to apply for jobs</p>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+
+</div>
+
+{% endblock %}  {# 👈 END content block #}
+
+
+{% block chatbot %}
+<link rel="stylesheet" href="{% static 'chatbot/chat.css' %}">
+{% include "chatbot/chat_widget.html" %}
+<script src="{% static 'chatbot/chat.js' %}"></script>
+{% endblock %}

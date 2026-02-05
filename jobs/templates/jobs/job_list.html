@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}Jobs{% endblock %}
+
+{% block content %}
+
+<h2 class="mb-4">Job Listings</h2>
+
+<form method="get" class="mb-4">
+  <div class="row g-2">
+    <div class="col-md-5">
+      <input type="text" name="q"
+             value="{{ query }}"
+             class="form-control"
+             placeholder="Search job title or skills">
+    </div>
+
+    <div class="col-md-4">
+      <input type="text" name="location"
+             value="{{ location }}"
+             class="form-control"
+             placeholder="Location">
+    </div>
+
+    <div class="col-md-3">
+      <button class="btn btn-primary w-100">
+        Search
+      </button>
+    </div>
+  </div>
+</form>
+
+
+{% for job in jobs %}
+  <div class="card mb-3">
+    <div class="card-body">
+      <h5 class="card-title">{{ job.title }}</h5>
+      <h6 class="card-subtitle text-muted mb-2">
+        {{ job.company }} | {{ job.location }}
+      </h6>
+
+      <p class="card-text">
+        {{ job.description|truncatewords:25 }}
+      </p>
+
+      {% if user.is_authenticated %}
+        {% if job.id in applied_jobs %}
+          <span class="badge bg-success">Applied</span>
+
+        {% else %}
+          {% if completion == 100 %}
+            <a href="{% url 'jobs:apply' job.id %}" class="btn btn-primary">
+              Apply
+            </a>
+          {% else %}
+            <a href="{% url 'profiles:setup' %}" class="btn btn-warning">
+              Complete Profile to Apply
+            </a>
+          {% endif %}
+        {% endif %}
+
+      {% else %}
+        <a href="{% url 'login' %}" class="btn btn-outline-secondary">
+          Login to Apply
+        </a>
+      {% endif %}
+    </div>
+  </div>
+
+{% empty %}
+  <div class="alert alert-warning">
+    No jobs available
+  </div>
+{% endfor %}
+
+{% if recommended_jobs %}
+<hr>
+<h3 class="mb-3 text-success">Recommended Jobs</h3>
+
+{% for job in recommended_jobs %}
+  <div class="card mb-3 border-success">
+    <div class="card-body">
+      <h5>{{ job.title }}</h5>
+      <p>{{ job.company }} | {{ job.location }}</p>
+      <span class="badge bg-success">Skill Match</span>
+    </div>
+  </div>
+{% endfor %}
+{% endif %}
+
+{% endblock %}
