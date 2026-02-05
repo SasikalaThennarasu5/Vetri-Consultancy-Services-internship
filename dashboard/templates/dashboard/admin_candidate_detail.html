@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Candidate Profile{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Candidate Profile</h2>
+
+<div class="card p-4 mb-3">
+  <p><strong>Name:</strong> {{ profile.full_name }}</p>
+  <p><strong>Email:</strong> {{ profile.user.email }}</p>
+  <p><strong>Phone:</strong> {{ profile.phone }}</p>
+  <p><strong>Experience:</strong> {{ profile.experience }} years</p>
+  <p><strong>Location:</strong> {{ profile.location }}</p>
+  <p><strong>Skills:</strong><br>{{ profile.skills }}</p>
+
+  <p>
+    <strong>Profile Completion:</strong>
+    {{ profile.completion_percentage }}%
+  </p>
+
+  {% if profile.resume %}
+    <a href="{{ profile.resume.url }}" target="_blank"
+       class="btn btn-success">
+      View / Download Resume
+    </a>
+  {% else %}
+    <span class="text-muted">No resume uploaded</span>
+  {% endif %}
+</div>
+
+<a href="{% url 'dashboard:admin_candidates' %}" class="btn btn-secondary">
+  Back
+</a>
+{% endblock %}

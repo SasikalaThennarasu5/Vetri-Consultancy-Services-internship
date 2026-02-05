@@ -1,0 +1,36 @@
+<ul class="list-group">
+  {% for app in applications %}
+    <li class="list-group-item d-flex justify-content-between">
+      <span>
+        <strong>{{ app.job.title }}</strong>
+        ({{ app.job.company }})
+      </span>
+
+      {% if app.status == "applied" %}
+        <span class="badge bg-secondary">Applied</span>
+      {% elif app.status == "shortlisted" %}
+        <span class="badge bg-success">Shortlisted</span>
+      {% else %}
+        <span class="badge bg-danger">Rejected</span>
+      {% endif %}
+    </li>
+  {% empty %}
+    <li class="list-group-item">No applications yet</li>
+  {% endfor %}
+</ul>
+
+<h4>My Certificates</h4>
+
+{% for cert in certificates %}
+  <div class="card mb-2">
+    <div class="card-body">
+      <strong>{{ cert.course.title }}</strong>
+      <a href="{% url 'training:certificate' cert.id %}"
+         class="btn btn-sm btn-success float-end">
+        Download Certificate
+      </a>
+    </div>
+  </div>
+{% empty %}
+  <p>No certificates yet</p>
+{% endfor %}
