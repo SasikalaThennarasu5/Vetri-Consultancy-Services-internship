@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-jt=88yl86m+(sc8)o-!8(pi#_*+0p$$7t_6-%2mpq1v(mjfp_b
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -166,5 +166,6 @@ SOCIALACCOUNT_QUERY_EMAIL = True
 SOCIALACCOUNT_LOGIN_ON_GET = True
 
 SITE_ID = 1
+
 
 
