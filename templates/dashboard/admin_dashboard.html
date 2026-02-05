@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Admin Dashboard</h2>
+
+<div class="mb-4">
+  <a href="/admin/jobs/job/add/" class="btn btn-success">
+    ➕ Add Job
+  </a>
+</div>
+
+{% if user.is_staff %}
+  <a href="{% url 'dashboard:admin_candidates' %}"
+     class="btn btn-success me-2">
+    View Candidates
+  </a>
+{% endif %}
+
+<h4>All Jobs</h4>
+<table class="table table-bordered">
+  <tr>
+    <th>Title</th>
+    <th>Company</th>
+    <th>Location</th>
+  </tr>
+  {% for job in jobs %}
+  <tr>
+    <td>{{ job.title }}</td>
+    <td>{{ job.company }}</td>
+    <td>{{ job.location }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+<h4 class="mt-5">Applications</h4>
+<table class="table table-striped">
+  <tr>
+    <th>Candidate</th>
+    <th>Job</th>
+  </tr>
+  {% for app in applications %}
+  <tr>
+    <td>{{ app.user.username }}</td>
+    <td>{{ app.job.title }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+<h2>Admin Dashboard</h2>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Candidate</th>
+      <th>Job</th>
+      <th>Status</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for app in applications %}
+    <tr>
+      <td>{{ app.user.username }}</td>
+      <td>{{ app.job.title }}</td>
+      <td>
+        <span class="badge
+          {% if app.status == 'applied' %}bg-warning
+          {% elif app.status == 'shortlisted' %}bg-success
+          {% else %}bg-danger{% endif %}">
+          {{ app.status|title }}
+        </span>
+      </td>
+
+      <td>
+        {% if app.status == 'applied' %}
+          <a href="{% url 'dashboard:update_status' app.id 'shortlisted' %}"
+             class="btn btn-sm btn-success">
+            Approve
+          </a>
+
+          <a href="{% url 'dashboard:update_status' app.id 'rejected' %}"
+             class="btn btn-sm btn-danger">
+            Reject
+          </a>
+        {% else %}
+          —
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

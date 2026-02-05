@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}My Dashboard{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">My Dashboard</h2>
+
+<div class="mb-4">
+  <label class="form-label">
+    Profile Completion: {{ completion }}%
+  </label>
+
+  <div class="progress">
+    <div class="progress-bar bg-success"
+         role="progressbar"
+         style="width: {{ completion }}%;"
+         aria-valuenow="{{ completion }}"
+         aria-valuemin="0"
+         aria-valuemax="100">
+    </div>
+  </div>
+
+  {% if completion < 100 %}
+    <small class="text-danger">
+      Complete your profile to apply for more jobs
+    </small>
+  {% endif %}
+</div>
+
+<h4>Applied Jobs</h4>
+
+{% if applications %}
+  <ul class="list-group mb-4">
+  {% for app in applications %}
+    <li class="list-group-item d-flex justify-content-between">
+      <span>
+        <strong>{{ app.job.title }}</strong>
+        ({{ app.job.company }})
+      </span>
+
+      {% if app.status == "applied" %}
+        <span class="badge bg-secondary">Applied</span>
+      {% elif app.status == "shortlisted" %}
+        <span class="badge bg-success">Shortlisted</span>
+      {% else %}
+        <span class="badge bg-danger">Rejected</span>
+      {% endif %}
+    </li>
+  {% empty %}
+    <li class="list-group-item">No applications yet</li>
+  {% endfor %}
+  </ul>
+
+  <h4>My Applications</h4>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Job</th>
+        <th>Status</th>
+        <th>Applied On</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for app in applications %}
+      <tr>
+        <td>{{ app.job.title }}</td>
+        <td>
+          <span class="badge
+            {% if app.status == 'applied' %}bg-warning
+            {% elif app.status == 'shortlisted' %}bg-success
+            {% else %}bg-danger{% endif %}">
+            {{ app.status|title }}
+          </span>
+        </td>
+        <td>{{ app.applied_at|date:"d M Y" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+{% else %}
+  <div class="alert alert-info">
+    You have not applied to any jobs yet.
+  </div>
+{% endif %}
+
+{% endblock %}

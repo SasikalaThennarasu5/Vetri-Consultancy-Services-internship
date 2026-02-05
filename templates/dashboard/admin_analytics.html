@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Analytics Dashboard</h2>
+
+<div class="row text-center mb-4">
+  <div class="col">Jobs<br><strong>{{ total_jobs }}</strong></div>
+  <div class="col">Users<br><strong>{{ total_users }}</strong></div>
+  <div class="col">Applications<br><strong>{{ total_applications }}</strong></div>
+</div>
+
+<h4>Application Status</h4>
+<ul>
+  {% for s in status_stats %}
+    <li>{{ s.status|title }} : {{ s.count }}</li>
+  {% endfor %}
+</ul>
+
+<h4>Top Jobs</h4>
+<ul>
+  {% for job in popular_jobs %}
+    <li>{{ job.title }} ({{ job.app_count }} applications)</li>
+  {% endfor %}
+</ul>
+
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}Training{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">🎓 Training Programs</h2>
+
+<!-- PYTHON -->
+<div class="card mb-4">
+  <div class="card-header bg-primary text-white">
+    Python Training
+  </div>
+  <div class="card-body">
+    <h6>Important Rules</h6>
+    <ul>
+      <li>Python is indentation-sensitive</li>
+      <li>Dynamic typing (no need to declare types)</li>
+      <li>Everything is an object</li>
+    </ul>
+
+    <h6>Example</h6>
+    <pre><code>
+def greet(name):
+    return f"Hello, {name}"
+
+print(greet("Sasi"))
+    </code></pre>
+
+    <p>
+      Python is widely used in web development, data science,
+      automation, and AI.
+    </p>
+  </div>
+</div>
+
+<!-- SQL -->
+<div class="card mb-4">
+  <div class="card-header bg-success text-white">
+    SQL Training
+  </div>
+  <div class="card-body">
+    <h6>Important Rules</h6>
+    <ul>
+      <li>SQL is case-insensitive</li>
+      <li>Use PRIMARY KEY for uniqueness</li>
+      <li>Normalize data to avoid duplication</li>
+    </ul>
+
+    <h6>Example</h6>
+    <pre><code>
+SELECT name, email
+FROM users
+WHERE is_active = 1
+ORDER BY name;
+    </code></pre>
+
+    <p>
+      SQL is used to manage and query relational databases
+      like MySQL, PostgreSQL, and SQLite.
+    </p>
+  </div>
+</div>
+
+<!-- DJANGO -->
+<div class="card mb-4">
+  <div class="card-header bg-dark text-white">
+    Django Training
+  </div>
+  <div class="card-body">
+    <h6>Important Rules</h6>
+    <ul>
+      <li>MVT architecture (Model-View-Template)</li>
+      <li>DRY principle (Don't Repeat Yourself)</li>
+      <li>Use ORM instead of raw SQL</li>
+    </ul>
+
+    <h6>Example</h6>
+    <pre><code>
+# views.py
+from django.shortcuts import render
+
+def home(request):
+    return render(request, "home.html")
+    </code></pre>
+
+    <p>
+      Django is a high-level Python framework used to build
+      secure and scalable web applications.
+    </p>
+  </div>
+</div>
+
+{% endblock %}

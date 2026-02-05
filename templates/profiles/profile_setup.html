@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Profile Setup{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h2 class="mb-4">Profile Setup</h2>
+
+  <form method="POST" enctype="multipart/form-data" class="card p-4">
+    {% csrf_token %}
+
+    <div class="mb-3">
+      <label class="form-label">Full Name</label>
+      <input type="text" name="full_name"
+             class="form-control"
+             value="{{ profile.full_name|default:'' }}"
+             required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Phone</label>
+      <input type="text" name="phone"
+             class="form-control"
+             value="{{ profile.phone|default:'' }}">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Experience (years)</label>
+      <input type="number" name="experience"
+             class="form-control"
+             value="{{ profile.experience|default:'' }}">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Location</label>
+      <input type="text" name="location"
+             class="form-control"
+             value="{{ profile.location|default:'' }}">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Skills</label>
+      <textarea name="skills"
+                class="form-control"
+                rows="3">{{ profile.skills|default:'' }}</textarea>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Resume (PDF / DOC)</label>
+      <input type="file" name="resume" class="form-control">
+
+      {% if profile.resume %}
+        <small class="text-muted">
+          Current: <a href="{{ profile.resume.url }}" target="_blank">View Resume</a>
+        </small>
+      {% endif %}
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">
+      Save Profile
+    </button>
+  </form>
+</div>
+{% endblock %}
