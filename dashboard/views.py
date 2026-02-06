@@ -7,7 +7,8 @@ from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Count
 from django.contrib.auth.models import User
 from training.models import CourseEnrollment
-
+from django.core.mail import send_mail
+from django.conf import settings
 
 @login_required
 def admin_dashboard(request):
@@ -29,7 +30,7 @@ def admin_dashboard(request):
 
 @login_required
 def user_dashboard(request):
-    profile = Profile.objects.get(user=request.user)
+    profile = Profile.objects.filter(user=request.user).first()
     applications = JobApplication.objects.filter(user=request.user)
 
     certificates = CourseEnrollment.objects.filter(
@@ -37,30 +38,61 @@ def user_dashboard(request):
         completed=True
     )
 
+    completion = profile.completion_percentage if profile else 0
+
     return render(request, "dashboard/user_dashboard.html", {
         "profile": profile,
+        "completion": completion,
         "applications": applications,
         "certificates": certificates,
     })
+
 
     
 
 @login_required
 def update_application_status(request, app_id, status):
-    if not request.user.is_staff:
-        return redirect("dashboard:user")
-
     application = get_object_or_404(JobApplication, id=app_id)
 
     application.status = status
     application.save()
 
+    # 🔔 EMAIL WHEN SHORTLISTED
     if status == "shortlisted":
-        messages.success(request, "Application shortlisted ✅")
-    elif status == "rejected":
-        messages.error(request, "Application rejected ❌")
+        subject = "🎉 Interview Shortlisted – Vetri Consultancy Services"
 
-    return redirect("dashboard:admin")
+        message = f"""
+Dear {application.user.username},
+
+Congratulations! 🎉
+
+You have been shortlisted for an interview.
+
+Job Details:
+- Job Title: {application.job.title}
+- Company: {application.job.company}
+
+Our HR team will contact you shortly with interview details.
+
+Best regards,
+Vetri Consultancy Services
+"""
+
+        send_mail(
+            subject,
+            message,
+            settings.DEFAULT_FROM_EMAIL,
+            [application.user.email],
+            fail_silently=False,
+        )
+
+        messages.success(request, "Candidate shortlisted and email sent 📧")
+
+    elif status == "rejected":
+        messages.warning(request, "Application rejected")
+
+    return redirect("dashboard:admin_candidates")
+
 
 def admin_candidates(request):
     if not request.user.is_staff:
