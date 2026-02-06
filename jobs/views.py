@@ -63,7 +63,7 @@ def apply_job(request, job_id):
     job = get_object_or_404(Job, id=job_id)
     profile = Profile.objects.get(user=request.user)
 
-    if profile.completion_percentage() < 100:
+    if profile.completion_percentage < 100:
         messages.error(request, "Complete your profile before applying")
         return redirect("profiles:setup")
 
@@ -73,4 +73,5 @@ def apply_job(request, job_id):
     )
 
     messages.success(request, "Application submitted successfully")
+
     return redirect("jobs:list")   # ✅ FIXED
