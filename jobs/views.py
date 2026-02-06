@@ -36,7 +36,7 @@ def job_list(request):
 
         # PROFILE COMPLETION
         if profile:
-            completion = profile.completion_percentage()
+            completion = profile.completion_percentage
 
         # SKILL-BASED RECOMMENDATION
         if profile and profile.skills:
@@ -75,3 +75,4 @@ def apply_job(request, job_id):
     messages.success(request, "Application submitted successfully")
 
     return redirect("jobs:list")   # ✅ FIXED
+
