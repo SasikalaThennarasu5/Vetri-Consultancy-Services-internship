@@ -12,7 +12,8 @@ def profile_setup(request):
     if request.method == "POST":
         profile.full_name = request.POST.get("full_name")
         profile.phone = request.POST.get("phone")
-        profile.experience = request.POST.get("experience") or None
+        experience = request.POST.get("experience")
+        profile.experience = int(experience) if experience else None
         profile.location = request.POST.get("location")
         profile.skills = request.POST.get("skills")
 
@@ -42,5 +43,5 @@ def profile_view(request):
         "profile": profile,
         "certificates": certificates,
         "skills_list": skills_list,
-        "completion_percent": profile.completion_percentage(),
+        "completion_percent": profile.completion_percentage
     })
